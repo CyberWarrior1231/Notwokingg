@@ -70,9 +70,9 @@ photozip = 'https://envs.sh/cD_.jpg'
 
 
 # Inline keyboard for start command
-BUTTONSCONTACT = InlineKeyboardMarkup([[InlineKeyboardButton(text="📞 Contact", url="https://t.me/saini_contact_bot")]])
+BUTTONSCONTACT = InlineKeyboardMarkup([[InlineKeyboardButton(text="📞 Contact", url="https://t.me/Theprimevault01")]])
 keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton(text="🛠️ Help", url="https://t.me/+3k-1zcJxINYwNGZl"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/cyberseller999/saini-txt-direct")],
+        [InlineKeyboardButton(text="🛠️ Help", url="https://t.me/Theprimevault01")],
 ])
 
 # Image URLs for the random image feature
@@ -751,10 +751,10 @@ async def txt_handler(bot: Client, m: Message):
                 url = url.split("bcov_auth")[0]+bcov
                 
             elif "childId" in url and "parentId" in url:
-                url = f"https://anonymousrajputplayer-9ab2f2730a02.herokuapp.com/pw?url={url}&token={raw_text4}"
+                url = f"https://anonymouspwplayerr-c96de7802811.herokuapp.com/pw?url={url}&token={raw_text4}"
                            
             elif "d1d34p8vz63oiq" in url or "sec1.pw.live" in url:
-                url = f"https://anonymouspwplayer-b99f57957198.herokuapp.com/pw?url={url}?token={raw_text4}"
+                url = f"https://anonymouspwplayerr-c96de7802811.herokuapp.com/pw?url={url}&token={raw_text4}"
 
             if ".pdf*" in url:
                 url = f"https://dragoapi.vercel.app/pdf/{url}"
@@ -780,12 +780,12 @@ async def txt_handler(bot: Client, m: Message):
                 cmd = f'yt-dlp -f "{ytf}" "{url}" -o "{name}.mp4"'
 
             try:
-                cc = f'——— ✦ {str(count).zfill(3)} ✦ ———\n\n**🎞️ Title :** `{name1}`\n**├── Extention :**  {CR} .mkv\n**├── Resolution :** [{res}]\n\n<blockquote><b>📚 Course :</b> {b_name}</blockquote>\n\n**🌟 Extracted By :** {CR}'
-                cc1 = f'——— ✦ {str(count).zfill(3)} ✦ ———\n\n**📁 Title :** `{name1}`\n**├── Extention :**  {CR} .pdf\n\n<blockquote><b>📚 Course :</b> {b_name}</blockquote>\n\n**🌟 Extracted By :** {CR}'
-                cczip = f'——— ✦ {str(count).zfill(3)} ✦ ———\n\n**📁 Title :** `{name1}`\n**├── Extention :**  {CR} .zip\n\n<blockquote><b>📚 Course :</b> {b_name}</blockquote>\n\n**🌟 Extracted By :** {CR}'
-                ccimg = f'——— ✦ {str(count).zfill(3)} ✦ ———\n\n**🖼️ Title :** `{name1}`\n**├── Extention :**  {CR} .jpg\n\n<blockquote><b>📚 Course :</b> {b_name}</blockquote>\n\n**🌟 Extracted By :** {CR}'
-                ccm = f'——— ✦ {str(count).zfill(3)} ✦ ———\n\n**🎵 Title :** `{name1}`\n**├── Extention :**  {CR} .mp3\n\n<blockquote><b>📚 Course :</b> {b_name}</blockquote>\n\n**🌟 Extracted By :** {CR}'
-                cchtml = f'——— ✦ {str(count).zfill(3)} ✦ ———\n\n**🌐 Title :** `{name1}`\n**├── Extention :**  {CR} .html\n\n<blockquote><b>📚 Course :</b> {b_name}</blockquote>\n\n**🌟 Extracted By :** {CR}'
+                cc = f'——— ✦ {str(count).zfill(3)} ✦ ———\n\n**🎞️ Title :** `{name1}`\n**├── Eᴜᴛᴇɴsɪᴏɴ : ➤**  {CR} .mkv\n**├── Rᴇsᴏʟᴜᴛɪᴏɴ :** [{res}]\n\n<blockquote><b>🧿 Bᴀᴛᴄʜ Nᴀᴍᴇ : ➤</b> {b_name}</blockquote>\n\n**📥 Eᴛʀᴀᴄᴛᴇᴅ Bʏ : ➤** {CR}'
+                cc1 = f'——— ✦ {str(count).zfill(3)} ✦ ———\n\n**📝 Tɪᴛʟᴇ : ➤** `{name1}`\n**├── Eᴜᴛᴇɴsɪᴏɴ : ➤**  {CR} .pdf\n\n<blockquote><b>🧿 Bᴀᴛᴄʜ Nᴀᴍᴇ : ➤</b> {b_name}</blockquote>\n\n**📥 Eᴛʀᴀᴄᴛᴇᴅ Bʏ : ➤** {CR}'
+                cczip = f'——— ✦ {str(count).zfill(3)} ✦ ———\n\n**📝 Tɪᴛʟᴇ : ➤** `{name1}`\n**├── Eᴜᴛᴇɴsɪᴏɴ : ➤**  {CR} .zip\n\n<blockquote><b>🧿 Bᴀᴛᴄʜ Nᴀᴍᴇ : ➤</b> {b_name}</blockquote>\n\n**📥 Eᴛʀᴀᴄᴛᴇᴅ Bʏ : ➤** {CR}'
+                ccimg = f'——— ✦ {str(count).zfill(3)} ✦ ———\n\n**🖼️ Title :** `{name1}`\n**├── Extention :**  {CR} .jpg\n\n<blockquote><b>🧿 Bᴀᴛᴄʜ Nᴀᴍᴇ : ➤</b> {b_name}</blockquote>\n\n**📥 Eᴛʀᴀᴄᴛᴇᴅ Bʏ : ➤** {CR}'
+                ccm = f'——— ✦ {str(count).zfill(3)} ✦ ———\n\n**🎵 Title :** `{name1}`\n**├── Eᴜᴛᴇɴsɪᴏɴ : ➤**  {CR} .mp3\n\n<blockquote><b>🧿 Bᴀᴛᴄʜ Nᴀᴍᴇ : ➤</b> {b_name}</blockquote>\n\n**🌟 Extracted By :** {CR}'
+                cchtml = f'——— ✦ {str(count).zfill(3)} ✦ ———\n\n**🌐 Title :** `{name1}`\n**├── Extention :**  {CR} .html\n\n<blockquote><b>📚 Course :</b> {b_name}</blockquote>\n\n**📥 Eᴛʀᴀᴄᴛᴇᴅ Bʏ : ➤** {CR}'
 
                 if "drive" in url:
                     try:
