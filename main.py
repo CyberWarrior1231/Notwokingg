@@ -726,7 +726,7 @@ async def txt_handler(bot: Client, m: Message):
                 keys_string = " ".join([f"--key {key}" for key in keys])
 
             elif "classplusapp.com/drm/" in url:
-                url = f"https://mteckapi.vercel.app/ITsGOLU_OFFICIAL?url={url}&token={raw_text4}"
+                url = f"https://mteckapi.vercel.app/ITsGOLU_OFFICIAL?url={url}&user_id={user_id}"
                 mpd, keys = helper.get_mps_and_keys(url)
                 url = mpd
                 keys_string = " ".join([f"--key {key}" for key in keys])
