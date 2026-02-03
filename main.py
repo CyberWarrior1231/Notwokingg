@@ -714,23 +714,111 @@ async def txt_handler(bot: Client, m: Message):
                     async with session.get(url, headers={'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9', 'Accept-Language': 'en-US,en;q=0.9', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive', 'Pragma': 'no-cache', 'Referer': 'http://www.visionias.in/', 'Sec-Fetch-Dest': 'iframe', 'Sec-Fetch-Mode': 'navigate', 'Sec-Fetch-Site': 'cross-site', 'Upgrade-Insecure-Requests': '1', 'User-Agent': 'Mozilla/5.0 (Linux; Android 12; RMX2121) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Mobile Safari/537.36', 'sec-ch-ua': '"Chromium";v="107", "Not=A?Brand";v="24"', 'sec-ch-ua-mobile': '?1', 'sec-ch-ua-platform': '"Android"',}) as resp:
                         text = await resp.text()
                         url = re.search(r"(https://.*?playlist.m3u8.*?)\"", text).group(1)
-
+            
             if "acecwply" in url:
                 cmd = f'yt-dlp -o "{name}.%(ext)s" -f "bestvideo[height<={raw_text2}]+bestaudio" --hls-prefer-ffmpeg --no-keep-video --remux-video mkv --no-warning "{url}"'
 
-            elif "https://cpvod.testbook.com/" in url:
-                url = url.replace("https://cpvod.testbook.com/","https://media-cdn.classplusapp.com/drm/")
-                url = f"https://scammer-keys.vercel.app/api?url={url}&token={cptoken}&auth=@scammer_botxz1"
-                mpd, keys = helper.get_mps_and_keys(url)
-                url = mpd
-                keys_string = " ".join([f"--key {key}" for key in keys])
+            elif "https://static-trans-v1.classx.co.in" in url or "https://static-trans-v2.classx.co.in" in url:
+                base_with_params, signature = url.split("*")
 
-            elif "classplusapp.com/drm/" in url:
-                url = f"https://mteckapi.vercel.app/ITsGOLU_OFFICIAL?url={url}&user_id={user_id}"
-                mpd, keys = helper.get_mps_and_keys(url)
-                url = mpd
-                keys_string = " ".join([f"--key {key}" for key in keys])
+                base_clean = base_with_params.split(".mkv")[0] + ".mkv"
 
+                if "static-trans-v1.classx.co.in" in url:
+                    base_clean = base_clean.replace("https://static-trans-v1.classx.co.in", "https://appx-transcoded-videos-mcdn.akamai.net.in")
+                elif "static-trans-v2.classx.co.in" in url:
+                    base_clean = base_clean.replace("https://static-trans-v2.classx.co.in", "https://transcoded-videos-v2.classx.co.in")
+
+                url = f"{base_clean}*{signature}"
+            
+            elif "https://static-rec.classx.co.in/drm/" in url:
+                base_with_params, signature = url.split("*")
+
+                base_clean = base_with_params.split("?")[0]
+
+                base_clean = base_clean.replace("https://static-rec.classx.co.in", "https://appx-recordings-mcdn.akamai.net.in")
+
+                url = f"{base_clean}*{signature}"
+
+            elif "https://static-wsb.classx.co.in/" in url:
+                clean_url = url.split("?")[0]
+
+                clean_url = clean_url.replace("https://static-wsb.classx.co.in", "https://appx-wsb-gcp-mcdn.akamai.net.in")
+
+                url = clean_url
+
+            elif "https://static-db.classx.co.in/" in url:
+                if "*" in url:
+                    base_url, key = url.split("*", 1)
+                    base_url = base_url.split("?")[0]
+                    base_url = base_url.replace("https://static-db.classx.co.in", "https://appxcontent.kaxa.in")
+                    url = f"{base_url}*{key}"
+                else:
+                    base_url = url.split("?")[0]
+                    url = base_url.replace("https://static-db.classx.co.in", "https://appxcontent.kaxa.in")
+
+
+            elif "https://static-db-v2.classx.co.in/" in url:
+                if "*" in url:
+                    base_url, key = url.split("*", 1)
+                    base_url = base_url.split("?")[0]
+                    base_url = base_url.replace("https://static-db-v2.classx.co.in", "https://appx-content-v2.classx.co.in")
+                    url = f"{base_url}*{key}"
+                else:
+                    base_url = url.split("?")[0]
+                    url = base_url.replace("https://static-db-v2.classx.co.in", "https://appx-content-v2.classx.co.in")
+
+                user_id = m.from_user.id
+
+            elif any(x in url for x in ["https://cpvod.testbook.com/", "classplusapp.com/drm/", "media-cdn.classplusapp.com", "media-cdn-alisg.classplusapp.com", "media-cdn-a.classplusapp.com", "tencdn.classplusapp", "videos.classplusapp", "webvideos.classplusapp.com"]):
+                # normalize cpvod -> media-cdn path used by API
+                url_norm = url.replace("https://cpvod.testbook.com/", "https://media-cdn.classplusapp.com/drm/")
+                api_url_call = f"https://cp-api-repo.vercel.app/ITsGOLU_OFFICIAL?url={url}"
+                keys_string = ""
+                mpd = None
+                try:
+                    resp = requests.get(api_url_call, timeout=30)
+                    # parse JSON safely
+                    try:
+                        data = resp.json()
+                    except Exception:
+                        data = None
+            
+                    # DRM response (MPD + KEYS)
+                    if isinstance(data, dict) and "KEYS" in data and "MPD" in data:
+                        mpd = data.get("MPD")
+                        keys = data.get("KEYS", [])
+                        url = mpd
+                        keys_string = " ".join([f"--key {k}" for k in keys])
+            
+                    # Non-DRM response (direct url)
+                    elif isinstance(data, dict) and "url" in data:
+                        url = data.get("url")
+                        keys_string = ""
+            
+                    else:
+                        # Unexpected response format — fallback to helper
+                        try:
+                            res = helper.get_mps_and_keys2(url_norm)
+                            if res:
+                                mpd, keys = res
+                                url = mpd
+                                keys_string = " ".join([f"--key {k}" for k in keys])
+                            else:
+                                keys_string = ""
+                        except Exception:
+                            keys_string = ""
+                except Exception:
+                    # API failed — attempt helper fallback
+                    try:
+                        res = helper.get_mps_and_keys2(url_norm)
+                        if res:
+                            mpd, keys = res
+                            url = mpd
+                            keys_string = " ".join([f"--key {k}" for k in keys])
+                        else:
+                            keys_string = ""
+                    except Exception:
+                        keys_string = ""
             elif "tencdn.classplusapp" in url:
                 headers = {'host': 'api.classplusapp.com', 'x-access-token': f'{raw_text4}', 'accept-language': 'EN', 'api-version': '18', 'app-version': '1.4.73.2', 'build-number': '35', 'connection': 'Keep-Alive', 'content-type': 'application/json', 'device-details': 'Xiaomi_Redmi 7_SDK-32', 'device-id': 'c28d3cb16bbdac01', 'region': 'IN', 'user-agent': 'Mobile-Android', 'webengage-luid': '00000187-6fe4-5d41-a530-26186858be4c', 'accept-encoding': 'gzip'}
                 params = {"url": f"{url}"}
@@ -738,39 +826,39 @@ async def txt_handler(bot: Client, m: Message):
                 url = response.json()['url']  
            
             elif 'videos.classplusapp' in url:
-                url = requests.get(f'https://api.classplusapp.com/cams/uploader/video/jw-signed-url?url={url}', headers={'x-access-token': f'{raw_text4}'}).json()['url']
+                url = requests.get(f'https://api.classplusapp.com/cams/uploader/video/jw-signed-url?url={url}', headers={'x-access-token': f'{cptoken}'}).json()['url']
             
             elif 'media-cdn.classplusapp.com' in url or 'media-cdn-alisg.classplusapp.com' in url or 'media-cdn-a.classplusapp.com' in url: 
-                headers = {'host': 'api.classplusapp.com', 'x-access-token': f'{raw_text4}', 'accept-language': 'EN', 'api-version': '18', 'app-version': '1.4.73.2', 'build-number': '35', 'connection': 'Keep-Alive', 'content-type': 'application/json', 'device-details': 'Xiaomi_Redmi 7_SDK-32', 'device-id': 'c28d3cb16bbdac01', 'region': 'IN', 'user-agent': 'Mobile-Android', 'webengage-luid': '00000187-6fe4-5d41-a530-26186858be4c', 'accept-encoding': 'gzip'}
+                headers = {'host': 'api.classplusapp.com', 'x-access-token': f'{cptoken}', 'accept-language': 'EN', 'api-version': '18', 'app-version': '1.4.73.2', 'build-number': '35', 'connection': 'Keep-Alive', 'content-type': 'application/json', 'device-details': 'Xiaomi_Redmi 7_SDK-32', 'device-id': 'c28d3cb16bbdac01', 'region': 'IN', 'user-agent': 'Mobile-Android', 'webengage-luid': '00000187-6fe4-5d41-a530-26186858be4c', 'accept-encoding': 'gzip'}
                 params = {"url": f"{url}"}
                 response = requests.get('https://api.classplusapp.com/cams/uploader/video/jw-signed-url', headers=headers, params=params)
                 url   = response.json()['url']
 
+            elif "childId" in url and "parentId" in url:
+                url = f"https://anonymouspwplayerr-c96de7802811.herokuapp.com/pw?url={url}&token={raw_text4}"
+
             if "edge.api.brightcove.com" in url:
                 bcov = f'bcov_auth={cwtoken}'
                 url = url.split("bcov_auth")[0]+bcov
-                
-            elif "childId" in url and "parentId" in url:
-                url = f"https://anonymouspwplayerr-c96de7802811.herokuapp.com/pw?url={url}&token={raw_text4}"
                            
-            elif "d1d34p8vz63oiq" in url or "sec1.pw.live" in url:
-                url = f"https://anonymouspwplayerr-c96de7802811.herokuapp.com/pw?url={url}&token={raw_text4}"
-
+            elif"d1d34p8vz63oiq" in url or "sec1.pw.live" in url:
+             url = f"https://anonymouspwplayerr-c96de7802811.herokuapp.com/pw?url={url}&token={raw_text4}"
             if ".pdf*" in url:
                 url = f"https://dragoapi.vercel.app/pdf/{url}"
-             
+            
             elif 'encrypted.m' in url:
                 appxkey = url.split('*')[1]
                 url = url.split('*')[0]
 
             if "youtu" in url:
-                ytf = f"b[height<={raw_text2}][ext=mp4]/bv[height<={raw_text2}][ext=mp4]+ba[ext=m4a]/b[ext=mp4]"
+                ytf = f"bv*[height<={raw_text2}][ext=mp4]+ba[ext=m4a]/b[height<=?{raw_text2}]"
             elif "embed" in url:
                 ytf = f"bestvideo[height<={raw_text2}]+bestaudio/best[height<={raw_text2}]"
             else:
                 ytf = f"b[height<={raw_text2}]/bv[height<={raw_text2}]+ba/b/bv+ba"
            
             if "jw-prod" in url:
+                url = url.replace("https://apps-s3-jw-prod.utkarshapp.com/admin_v1/file_library/videos","https://d1q5ugnejk3zoi.cloudfront.net/ut-production-jw/admin_v1/file_library/videos")
                 cmd = f'yt-dlp -o "{name}.mp4" "{url}"'
             elif "webvideos.classplusapp." in url:
                cmd = f'yt-dlp --add-header "referer:https://web.classplusapp.com/" --add-header "x-cdn-tag:empty" -f "{ytf}" "{url}" -o "{name}.mp4"'
