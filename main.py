@@ -862,10 +862,14 @@ async def txt_handler(bot: Client, m: Message):
                 cmd = f'yt-dlp -o "{name}.mp4" "{url}"'
             elif "webvideos.classplusapp." in url:
                cmd = f'yt-dlp --add-header "referer:https://web.classplusapp.com/" --add-header "x-cdn-tag:empty" -f "{ytf}" "{url}" -o "{name}.mp4"'
-            elif "youtube.com" in url or "youtu.be" in url:
-                cmd = f'yt-dlp --cookies youtube_cookies.txt -f "{ytf}" "{url}" -o "{name}".mp4'
-            else:
-                cmd = f'yt-dlp -f "{ytf}" "{url}" -o "{name}.mp4"'
+            cmd = f'yt-dlp --add-header "referer:https://web.classplusapp.com/" --add-header "x-cdn-tag:empty" -f "{ytf}" "{url}" -o "{name}.mp4"'
+            cmd = (
+    f'yt-dlp -o "{name}.mp4" "{url}" '
+    '--extractor-args "youtube:player_client=android" '
+    '--downloader ffmpeg '
+    '--merge-output-format mp4 '
+    '--no-playlist'
+)
 
             try:
                 cc = f'——— ✦ {str(count).zfill(3)} ✦ ———\n\n**🎞️ Title :** `{name1}`\n**├── Eᴜᴛᴇɴsɪᴏɴ : ➤**  {CR} .mkv\n**├── Rᴇsᴏʟᴜᴛɪᴏɴ :** [{res}]\n\n<blockquote><b>🧿 Bᴀᴛᴄʜ Nᴀᴍᴇ : ➤</b> {b_name}</blockquote>\n\n**📥 Eᴛʀᴀᴄᴛᴇᴅ Bʏ : ➤** {CR}'
